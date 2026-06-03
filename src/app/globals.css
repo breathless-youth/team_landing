@@ -1,0 +1,65 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 폰트 변수(--font-sans / --font-display)는 next/font가 layout.tsx에서 주입한다. */
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: theme("colors.ink");
+    color: theme("colors.fg");
+    /* 한글 단어 단위 줄바꿈 전역 적용 (§2) */
+    word-break: keep-all;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* 헤드라인 균형 줄바꿈 */
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+}
+
+@layer utilities {
+  /* 히어로 인라인 숫자 점프 — display 헤드라인 안에서 stat급으로 튀게 */
+  .text-stat-inline {
+    font-family: var(--font-display), system-ui, sans-serif;
+    font-size: clamp(2.75rem, 8vw, 6rem);
+    line-height: 0.9;
+    letter-spacing: -0.02em;
+  }
+
+  /* lime under-stroke (아이디어 헤더 후반부 강조) */
+  .underline-lime {
+    background-image: linear-gradient(
+      transparent 62%,
+      theme("colors.lime-glow") 62%
+    );
+    background-repeat: no-repeat;
+  }
+}
+
+/* ── 모션 전역 가드 (§5 필수) ──────────────────────────────
+   reduced-motion 사용자는 모든 진입/카운트업/펄스/트레이서를
+   최종 상태로 즉시 표기. Reveal/StatNumber/SectionMarker 컴포넌트는
+   prefers-reduced-motion을 JS에서도 확인하지만, CSS 차원에서도 가드한다. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
